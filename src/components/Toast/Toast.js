@@ -18,21 +18,47 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast() {
+function Toast({ children, variant, isOpen, setIsOpen }) {
+  function dismissToast() {
+    setIsOpen(false);
+  }
+  if (!isOpen) return '';
+
   return (
-    <div className={`${styles.toast} ${styles.notice}`}>
+    <div className={`${styles.toast} ${styles[variant]}`}>
       <div className={styles.iconContainer}>
-        <Info size={24} />
+        <Icon variant={variant} size={24} />
       </div>
-      <p className={styles.content}>
-        16 photos have been uploaded
-      </p>
-      <button className={styles.closeButton}>
+      <p className={styles.content}>{children}</p>
+      <button className={styles.closeButton} onClick={dismissToast}>
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );
+}
+
+function Icon({ variant, size, className }) {
+  let icon = '';
+
+  switch (variant) {
+    case 'notice':
+      icon = <Info size={size} />;
+      break;
+    case 'warning':
+      icon = <AlertTriangle size={size} />;
+      break;
+    case 'success':
+      icon = <CheckCircle size={size} />;
+      break;
+    case 'error':
+      icon = <AlertOctagon size={size} />;
+      break;
+    default:
+      icon = <Info size={size} />;
+      break;
+  }
+  return icon;
 }
 
 export default Toast;
