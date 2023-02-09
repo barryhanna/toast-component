@@ -13,10 +13,10 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(true);
 
-  function reset() {
+  const reset = React.useCallback(function reset() {
     setVariant('notice');
     setMessage('');
-  }
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
