@@ -1,6 +1,6 @@
 import React from 'react';
 
-function VariantRadioItem({ variant, setVariant }) {
+function VariantRadioItem({ variant, setVariant, checked }) {
   return (
     <label key={variant} htmlFor={`variant-${variant}`}>
       <input
@@ -8,7 +8,8 @@ function VariantRadioItem({ variant, setVariant }) {
         type="radio"
         name="variant"
         value={variant}
-        onClick={(e) => setVariant(e.target.value)}
+        checked={checked}
+        onChange={(e) => setVariant(e.target.value)}
       />
       {variant}
     </label>

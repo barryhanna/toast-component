@@ -18,19 +18,27 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ children, variant, isOpen, setIsOpen }) {
-  function dismissToast() {
-    setIsOpen(false);
-  }
+function Toast({
+  children,
+  variant,
+  isOpen,
+  setIsOpen,
+  deleteToast,
+  ...delegated
+}) {
   if (!isOpen) return '';
 
   return (
-    <div className={`${styles.toast} ${styles[variant]}`}>
+    <div className={`${styles.toast} ${styles[variant]}`} {...delegated}>
       <div className={styles.iconContainer}>
         <Icon variant={variant} size={24} />
       </div>
       <p className={styles.content}>{children}</p>
-      <button className={styles.closeButton} onClick={dismissToast}>
+      <button
+        type="button"
+        className={styles.closeButton}
+        onClick={(e) => deleteToast(delegated['data-index'])}
+      >
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
@@ -38,7 +46,7 @@ function Toast({ children, variant, isOpen, setIsOpen }) {
   );
 }
 
-function Icon({ variant, size, className }) {
+function Icon({ variant, size }) {
   let icon = '';
 
   switch (variant) {

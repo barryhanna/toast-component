@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from '../Button';
-import Toast from '../Toast';
+import ToastShelf from '../ToastShelf';
 import ToastMesssageInput from '../ToastMesssageInput/ToastMesssageInput';
 import VariantRadioGroup from '../VariantRadioGroup/VariantRadioGroup';
 
@@ -9,19 +9,39 @@ import styles from './ToastPlayground.module.css';
 
 function ToastPlayground() {
   const [variant, setVariant] = React.useState('notice');
-  const [message, setMessage] = React.useState('Deafult');
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [message, setMessage] = React.useState('');
+  const [isOpen, setIsOpen] = React.useState(true);
+  const [toasts, setToasts] = React.useState([]);
+
+  function deleteToast(i) {
+    setToasts((prevToasts) => {
+      return [...prevToasts.slice(0, i), ...prevToasts.slice(i + 1)];
+    });
+  }
+
+  function reset() {
+    setVariant('notice');
+    setMessage('');
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    return setToasts((prevToasts) => {
+      const newToast = { message, variant, isOpen, setIsOpen };
+      reset();
+      return [...prevToasts, newToast];
+    });
+  }
 
   return (
-    <div className={styles.wrapper}>
+    <form className={styles.wrapper} onSubmit={(e) => handleSubmit(e)}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
 
-      <Toast isOpen={isOpen} setIsOpen={setIsOpen} variant={variant}>
-        {message}
-      </Toast>
+      <ToastShelf toasts={toasts} deleteToast={deleteToast} />
 
       <div className={styles.controlsWrapper}>
         <ToastMesssageInput message={message} setMessage={setMessage} />
@@ -29,11 +49,11 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => setIsOpen(true)}>Pop Toast!</Button>
+            <Button>Pop Toast!</Button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
