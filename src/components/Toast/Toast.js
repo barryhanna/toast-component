@@ -33,39 +33,26 @@ function Toast({
       <div className={styles.iconContainer}>
         <Icon variant={variant} size={24} />
       </div>
-      <p className={styles.content}>{children}</p>
+      <p className={styles.content}>
+        <VisuallyHidden>{`${variant} - `}</VisuallyHidden>
+        {children}
+      </p>
       <button
         type="button"
         className={styles.closeButton}
+        aria-label="Dismiss Message"
+        aria-live="off"
         onClick={(e) => deleteToast(delegated['data-index'])}
       >
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );
 }
 
 function Icon({ variant, size }) {
-  let icon = '';
-
-  switch (variant) {
-    case 'notice':
-      icon = <Info size={size} />;
-      break;
-    case 'warning':
-      icon = <AlertTriangle size={size} />;
-      break;
-    case 'success':
-      icon = <CheckCircle size={size} />;
-      break;
-    case 'error':
-      icon = <AlertOctagon size={size} />;
-      break;
-    default:
-      icon = <Info size={size} />;
-      break;
-  }
+  const VariantIcon = ICONS_BY_VARIANT[variant];
+  const icon = <VariantIcon size={size} />;
   return icon;
 }
 
