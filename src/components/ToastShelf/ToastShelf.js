@@ -2,8 +2,17 @@ import React from 'react';
 
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
+import { ToastContext } from '../ToastProvider';
 
-function ToastShelf({ toasts, deleteToast }) {
+function ToastShelf() {
+  const { toasts, setToasts } = React.useContext(ToastContext);
+
+  function deleteToast(i) {
+    setToasts((prevToasts) => {
+      return [...prevToasts.slice(0, i), ...prevToasts.slice(i + 1)];
+    });
+  }
+
   return (
     <ol className={styles.wrapper}>
       {toasts.map(({ message, variant, isOpen, setIsOpen }, i) => (
@@ -13,7 +22,7 @@ function ToastShelf({ toasts, deleteToast }) {
             isOpen={isOpen}
             data-index={i}
             setIsOpen={setIsOpen}
-            deleteToast={deleteToast}
+            deleteToast={() => deleteToast(i)}
           >
             {message}
           </Toast>

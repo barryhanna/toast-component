@@ -4,20 +4,14 @@ import Button from '../Button';
 import ToastShelf from '../ToastShelf';
 import ToastMesssageInput from '../ToastMesssageInput/ToastMesssageInput';
 import VariantRadioGroup from '../VariantRadioGroup/VariantRadioGroup';
-
+import { ToastContext } from '../ToastProvider';
 import styles from './ToastPlayground.module.css';
 
 function ToastPlayground() {
+  const { setToasts } = React.useContext(ToastContext);
   const [variant, setVariant] = React.useState('notice');
   const [message, setMessage] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(true);
-  const [toasts, setToasts] = React.useState([]);
-
-  function deleteToast(i) {
-    setToasts((prevToasts) => {
-      return [...prevToasts.slice(0, i), ...prevToasts.slice(i + 1)];
-    });
-  }
 
   function reset() {
     setVariant('notice');
@@ -26,12 +20,11 @@ function ToastPlayground() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    return setToasts((prevToasts) => {
+    setToasts((prevToasts) => {
       const newToast = { message, variant, isOpen, setIsOpen };
-      reset();
       return [...prevToasts, newToast];
     });
+    reset();
   }
 
   return (
@@ -41,7 +34,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toasts} deleteToast={deleteToast} />
+      <ToastShelf />
 
       <div className={styles.controlsWrapper}>
         <ToastMesssageInput message={message} setMessage={setMessage} />
